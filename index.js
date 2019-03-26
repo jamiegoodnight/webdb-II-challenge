@@ -41,6 +41,23 @@ server.get("/api/zoos/:id", (req, res) => {
     });
 });
 
+server.post("/api/zoos/", (req, res) => {
+  db("zoos")
+    .insert(req.body)
+    .then(ids => {
+      const id = ids[0];
+      db("zoos")
+        .first()
+        .where({ id })
+        .then(zoo => {
+          res.status(200).json(zoo);
+        });
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
+});
+
 // endpoints here
 
 const port = 3300;
