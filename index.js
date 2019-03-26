@@ -58,6 +58,38 @@ server.post("/api/zoos/", (req, res) => {
     });
 });
 
+server.put("/api/zoos/:id", (req, res) => {
+  db("zoos")
+    .where({ id: req.params.id })
+    .update(req.body)
+    .then(count => {
+      if (count > 0) {
+        res.status(200).json(count);
+      } else {
+        res.status(404).json({ message: "Record not found" });
+      }
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
+});
+
+server.delete("/api/zoos/:id", (req, res) => {
+  db("zoos")
+    .where({ id: req.params.id })
+    .del()
+    .then(count => {
+      if (count > 0) {
+        res.status(204).end();
+      } else {
+        res.status(404).json({ message: "Record not found" });
+      }
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
+});
+
 // endpoints here
 
 const port = 3300;
