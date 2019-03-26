@@ -11,12 +11,35 @@ const knexConfig = {
   client: "sqlite3",
   useNullAsDefault: true,
   connection: {
-    filename: "./data/lamdba.sqlite3"
+    filename: "./data/lambda.sqlite3"
   },
   debug: true
 };
 
 const db = knex(knexConfig);
+
+server.get("/api/zoos/", (req, res) => {
+  db("zoos")
+    .then(zoos => {
+      res.status(200).json(zoos);
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
+});
+
+server.get("/api/zoos/:id", (req, res) => {
+  zooID = req.params.id;
+  db("zoos")
+    .first()
+    .where({ id: zooID })
+    .then(zoo => {
+      res.status(200).json(zoo);
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
+});
 
 // endpoints here
 
